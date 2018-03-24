@@ -19,24 +19,7 @@ class TodoListViewController: UITableViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         
-        let newItem = Item()
-        newItem.title = "Study iOS"
-        
-        itemArray.append(newItem)
-        
-        let newItem1 = Item()
-        newItem1.title = "Study AWS"
-        
-        itemArray.append(newItem1)
-        let newItem2 = Item()
-        newItem2.title = "Study Machine Learning"
-        
-        itemArray.append(newItem2)
-        print(self.dataFilePath)
-        
-        /*if let items = defaults.array(forKey: "TodoListArray") as? [Item]{
-            itemArray = items
-        }*/
+        loadItems()
     }
 
     override func didReceiveMemoryWarning() {
@@ -108,7 +91,16 @@ class TodoListViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    
+    func loadItems(){
+        do{
+            if let data = try? Data(contentsOf: dataFilePath){
+                let decoder = PropertyListDecoder()
+                try itemArray = decoder.decode([Item].self, from: data)
+            }
+        }catch{
+            print("loading error \(error)")
+        }
+    }
 
 }
 
